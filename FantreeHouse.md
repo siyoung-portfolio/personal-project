@@ -97,7 +97,6 @@ Backend 5명
         - SQL 인젝션 징후 발견 (RECOVER_YOUR_DATA 테이블)
     2. 원인 분석
         - Docker Compose 설정의 취약한 DB 패스워드
-        - Public GitHub 저장소에 노출된 보안 정보
         - EC2 퍼블릭 접근 통제 미흡
 - 대응 및 복구 과정
     1. **데이터 복구**
@@ -115,7 +114,6 @@ Backend 5명
     2. **설정 관리 개선**
         - 환경 변수를 통한 민감 정보 관리
         - 설정 파일 암호화
-        - Private Repository 전환
 
 ### ERD 정규화 및 최적화 과정 분석
 
