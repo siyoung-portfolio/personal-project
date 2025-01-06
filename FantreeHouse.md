@@ -94,7 +94,7 @@ Backend 5명
     1. 초기 증상
         - EC2 DB 연결 중단 (8월 20일 오전 11:23)
         - 전체 테이블 Drop 확인
-        - 랜섬웨어 감염 징후 발견 (RECOVER_YOUR_DATA 테이블)
+        - SQL 인젝션 징후 발견 (RECOVER_YOUR_DATA 테이블)
     2. 원인 분석
         - Docker Compose 설정의 취약한 DB 패스워드
         - Public GitHub 저장소에 노출된 보안 정보
