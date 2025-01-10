@@ -50,7 +50,6 @@
     ```
     - Postman 테스트 시 웹소켓 연결을 위한 URL
       - ws://localhost:8080/ws-stomp/websocket
-      - 
     - 서버에 보낸 connect 프레임
     ```
     CONNECT
