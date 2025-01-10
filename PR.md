@@ -60,7 +60,7 @@ Frontend 1명
     heart-beat:10000,10000
     
     ```
-    <img width="807" alt="image" src="https://github.com/user-attachments/assets/3d64d3f1-d05c-4378-b126-0e5b025bbb3c" />
+<img width="807" alt="image" src="https://github.com/user-attachments/assets/3d64d3f1-d05c-4378-b126-0e5b025bbb3c" />
 
   - 원인
     - connect 프레임을 보낼 때 한줄을 띄워야 함
@@ -68,11 +68,11 @@ Frontend 1명
   
   - 해결
     - 사진과 같이 Connect 프레임 수정
-      <img width="477" alt="image" src="https://github.com/user-attachments/assets/794161ea-1f41-41ba-917e-6694912470b1" />
+  <img width="477" alt="image" src="https://github.com/user-attachments/assets/794161ea-1f41-41ba-917e-6694912470b1" />
     - 해결에 도움을 받은 부분
       - https://min9805.github.io/stomp/
       - 위 사이트에서 개발자도구를 열고 한줄 띄워진 부분을 복사해서 사용
     - 통신이 되는 모습
-      <img width="756" alt="image" src="https://github.com/user-attachments/assets/ed826eb1-55e2-4747-bb7e-0f3a5eb7372d" />
+  <img width="756" alt="image" src="https://github.com/user-attachments/assets/ed826eb1-55e2-4747-bb7e-0f3a5eb7372d" />
 
     
