@@ -81,4 +81,110 @@ Frontend 1명
       
       <img width="756" alt="image" src="https://github.com/user-attachments/assets/ed826eb1-55e2-4747-bb7e-0f3a5eb7372d" />
 
+### 채팅방 입장 이전 메시지 자동 읽음처리 오류
+
+- 문제 상황
+  - 채팅방에 입장한 유저가 마지막으로 채팅을 읽은 시간을 시점부터 입장한 시점까지 읽지 않은 메시지 읽음 처리가 되지 않음
+  - 채팅방 입장시 ChatRoomMember에 관한 Select문 중복 발생
+  - 채팅방 입장 시, 읽지 않은 모든 메시지 읽음처리 로직
+    ```Java
+    public ChatMessageResponse enterRoom(Long roomId, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("Chat room not found"));
+
+        ChatRoomMember member = findChatRoomMember(roomId, userId);
+        markAsRead(roomId, userId);
+        member.setLeft(false);
+
+        markAllMessagesAsRead(roomId, userId);
+
+        // 입장 메시지 생성
+        ChatMessage enterMessage = ChatMessage.builder()
+                .chatRoom(chatRoom)
+                .sender(user)
+                .content(user.getNickname() + "님이 입장하셨습니다.")
+                .type(MessageType.ENTER)
+                .build();
+
+        ChatMessage savedMessage = chatMessageRepository.save(enterMessage);
+        return ChatMessageResponse.from(savedMessage);
+    }
+    ```
+
+    ```Java
+    @Transactional
+    public void markAllMessagesAsRead(Long roomId, Long userId) {
+        ChatRoomMember member = findChatRoomMember(roomId, userId);
+        chatMessageRepository.markMessagesAsRead(roomId, member.getLastReadAt());
+        member.updateLastRead();
+    }
+    ```
+    
+    ```Java
+    @Modifying  // 벌크 업데이트를 위한 어노테이션 추가
+    @Query("UPDATE ChatMessage m SET m.read = true " +
+            "WHERE m.chatRoom.id = :roomId " +
+            "AND m.sentAt > :lastReadAt " +
+            "AND m.read = false")
+    void markMessagesAsRead(
+            @Param("roomId") Long roomId,
+            @Param("lastReadAt") LocalDateTime lastReadAt
+    );
+    ```
+
+- 원인
+  - enterRoom 메서드에서 markAsRead라는 메서드 때문에 markAllMessageAsRead가 실행되기 전에 멤버의 마지막 읽은 시간이 바뀜
+  - 따로 로직 테스트 때문에 http 메서드를 만들어서 사용한 부분을 지우지 않았던 것
+  - 문제의 markAsRead
+  ```Java
+  public void markAsRead(Long roomId, Long userId) {
+        ChatRoomMember member = findChatRoomMember(roomId, userId);
+        member.updateLastRead();
+    }
+  ```
+  - markAllMessageAsRead에서 이미 찾은 멤버를 다시 찾고 있어서 Select문 중복 발생
+    ```java
+    @Transactional
+    public void markAllMessagesAsRead(Long roomId, Long userId) {
+        ChatRoomMember member = findChatRoomMember(roomId, userId);
+        chatMessageRepository.markMessagesAsRead(roomId, member.getLastReadAt());
+        member.updateLastRead();
+    }
+    ```
+- 해결
+  - 메서드 서순 정리 및 불필요한 메서드 제거 및 @Transactional 추가
+    ```Java
+    @Transactional
+    public ChatMessageResponse enterRoom(Long roomId, Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        ChatRoom chatRoom = chatRoomRepository.findById(roomId)
+                .orElseThrow(() -> new IllegalArgumentException("Chat room not found"));
+
+        ChatRoomMember member = findChatRoomMember(roomId, userId);
+        markAllMessagesAsRead(roomId, member);
+        member.setLeft(false);
+
+        // 입장 메시지 생성
+        ChatMessage enterMessage = ChatMessage.builder()
+                .chatRoom(chatRoom)
+                .sender(user)
+                .content(user.getNickname() + "님이 입장하셨습니다.")
+                .type(MessageType.ENTER)
+                .build();
+
+        ChatMessage savedMessage = chatMessageRepository.save(enterMessage);
+        return ChatMessageResponse.from(savedMessage);
+    }
+    ```
+  - markAllMessageAsRead 매개변수 ChatRoomMember 객체를 가져오도록 수정
+    ```java
+    private void markAllMessagesAsRead(Long roomId, ChatRoomMember member) {
+        chatMessageRepository.markMessagesAsRead(roomId, member.getLastReadAt());
+        member.updateLastRead();
+    }
+    ```
+    
     
