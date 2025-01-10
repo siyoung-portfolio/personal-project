@@ -12,8 +12,8 @@
 - ETC : Websocket(Stomp) 2.3.4
 
 ## 인원
-Backend 2명
-Frontend 1명
+- Backend 2명
+- Frontend 1명
 
 ## 담당업무
 - 기획
