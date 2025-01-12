@@ -7,6 +7,9 @@
 
 [[FanTreeHouse] 팬과 아티스트가 소통하는 서비스](https://www.notion.so/FanTreeHouse-ccc7b7b2e4b44872b3bd5ffd874a0b20?pvs=21) 
 
+## Github
+[FantreeHounse](https://github.com/FanTree-House/FanTree-Back)
+
 ## 사용된 기술
 - Framework : Spring Boot, Spring Batch(5.0.0), Flyway
 - DB : MySQL, Redis, Flyway
