@@ -2,7 +2,7 @@
 24.10.30 ~ 진행중
 
 ## Github
-[PR 프로젝트] 깃허브 링크 입니다.(https://github.com/project-recurit/PR-Back)
+[PR 프로젝트](https://github.com/project-recurit/PR-Back)
 
 ## 기획 의도 및 프로젝트 설명
 - 사이드 프로젝트 구인하는 서비스는 많지만, 개인이 자기PR을 하면서 많은 사람들에게 노출할 수 있는 서비스가 없어서 자신을 알릴 수 있으면 사이드 프로젝트를 하고 싶어하는 사람들에게 기회가 많이 가지 않을까 생각하여 기획하였습니다.
