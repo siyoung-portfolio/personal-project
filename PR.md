@@ -26,7 +26,8 @@
     - 북마크 기능
     - 회원 기술스택 CRUD
 - 회원가입 및 인증/인가
-    - **Security**를 이용해서 **회원관련 API 개발**
+    - **Next-auth** 와 **Spring Security** 이용해서 **회원관련 API 개발**
+    - 소셜 로그인(Next-auth) + 서버 자체 토근 발급(Spring Security)
 - 1:1 채팅 서비스
   - Stomp기반으로 1:1 채팅 서비스 구현
   - SessionId 유무로 자동 읽음 처리 구현
@@ -185,5 +186,73 @@
         member.updateLastRead();
     }
     ```
+
+
+### Next-auth의 소셜로그인 라이브러리를 사용하여 회원가입 구현
+
+- 문제 상황
+  - 프론트에서 소셜로그인할 때 등록된 유저인지 체크 -> 등록되지 않은 유저 -> 회원가입api -> 재 로그인
+  - 등록된 유저 -> 회원가입 api(에러 발생) -> 로그인(로그인은 정상적으로 처리)
+    ![image](https://github.com/user-attachments/assets/35c80ceb-9da9-4497-b5cc-9c5282105244)
+    ![image](https://github.com/user-attachments/assets/6502e6ab-1695-4900-8598-6c67920980bd)
+    ![image](https://github.com/user-attachments/assets/13b64708-e931-4cf7-9e55-c4720041a51b)
+  - 불필요한 앤드포인트도 같이 발생 
+- 원인 
+  - 하나의 플로우에서의 분기처리 제대로 되지 않음. (소셜 로그인 시도 > 등록된 유저 확인 > 회원가입/로그인)
+
+- 해결 방법
+  - 하나의 앤드포인트에서 유효성 검사 진행 및 비즈니스 로직 수행
+  - 로그인 앤드포인트에서 등록된 유저가 아닐 시, 회원가입 비즈니스 수행 후, JWT 토큰 발급
+  ```Java
+  public LoginResponseDto login(LoginRequestDto requestDto) {
+        Optional<User> optionalUser = userRepository.findBySocialId(requestDto.getSocialId());
+
+        User user;
+        if (optionalUser.isEmpty()) {
+            SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
+                    .socialId(requestDto.getSocialId())
+                    .socialProvider(requestDto.getProvider())
+                    .email(requestDto.getEmail())
+                    .nickname(requestDto.getNickname())
+                    // 소셜 로그인의 경우 필요한 기본값 설정
+                    .username(requestDto.getSocialId()) // 소셜 ID를 username으로 사용
+                    .password(passwordEncoder.encode(requestDto.getSocialId())) // 임시 비밀번호
+                    .techStack1s(requestDto.getTechStack1s()) // 빈 기술 스택으로 시작
+                    .build();
+
+            SignUpResponseDto signUpResponse = userService.register(signUpRequestDto);
+            user = userRepository.findBySocialId(signUpResponse.getUsername())
+                    .orElseThrow(() -> new CustomException(ErrorType.USER_NOT_FOUND));
+        }
+
+        else {
+            user = optionalUser.get();
+            validateUserStatus(user);
+        }
+
+        String accessToken = tokenService.createAccessToken(
+                user.getSocialId(),
+                user.getUserStatus(),
+                user.getUserRole()
+        );
+        String refreshToken = tokenService.createRefreshToken();
+
+        updateUserLoginInfo(user, refreshToken);
+
+        log.info("User logged in successfully: {}", user.getSocialId());
+
+        return LoginResponseDto.builder()
+                .loginId(user.getSocialId())
+                .userRole(user.getUserRole())
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
+  ```
+- 고려해야 할 점
+  - 회원가입 시 본인의 직무, 기술 스택, 닉네임 요청 받아야함.
+  - 프론트에서 하나의 로직으로 처리할 수 있는지
+  - 처리할 수 없다면 이전 문제상황이 다시 반복되는데 효율적인 처리방법 필요
+
     
     
