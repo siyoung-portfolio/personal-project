@@ -5,8 +5,6 @@
 
 저희 프로젝트는 팬과 아티스트가 함께 소통하고 구독을 통한 개인화 된 서비스를 제공하여 더욱 가까운 관계를 형성할 수 있는 플랫폼입니다.
 
-[[FanTreeHouse] 팬과 아티스트가 소통하는 서비스](https://www.notion.so/FanTreeHouse-ccc7b7b2e4b44872b3bd5ffd874a0b20?pvs=21) 
-
 ## Github
 [FantreeHounse](https://github.com/FanTree-House/FanTree-Back)
 
