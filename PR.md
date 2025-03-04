@@ -12,7 +12,7 @@
 - Framework : Spring Boot 3.x.x, Spring Security
 - Language : Java 17
 - DB : PostgreSQL
-- ETC : Websocket(Stomp) 2.3.4
+- ETC : Websocket(Stomp) 2.3.4 , Elasticsearch
 
 ## 인원
 - Backend 2명
@@ -31,7 +31,11 @@
 - 1:1 채팅 서비스
   - Stomp기반으로 1:1 채팅 서비스 구현
   - SessionId 유무로 자동 읽음 처리 구현
-  
+
+- 검색 기능 개발
+  - Elasticsearch 도입
+  - 게시글의 제목과 글 내용을 가지고 검색하여 결과 도출구현
+
 ## 트러블 슈팅
 
 ### Postman 통신 에러
@@ -254,5 +258,7 @@
   - 프론트에서 하나의 로직으로 처리할 수 있는지
   - 처리할 수 없다면 이전 문제상황이 다시 반복되는데 효율적인 처리방법 필요
 
+### ElasticSearch 도입
+[Elasticsearch 도입에 관하여](https://velog.io/@silica_o3o/SpringBoot-Elastic-Search-%EB%8F%84%EC%9E%85)
     
     
