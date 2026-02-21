@@ -4,3 +4,4 @@
 - [FantreeHouse 프로젝트](/FantreeHouse.md)
 - [PR 프로젝트](/PR.md)
 - [podpod 프로젝트](/podpod.md)
+- [운동 인증앱 프로젝트](/ExerciseAuth.md)
