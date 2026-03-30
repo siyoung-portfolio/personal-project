@@ -4,7 +4,7 @@
 - **기간**: 2026.02 ~
 - **인원**: 1인
 - **역할**: 기획 / 설계 / 개발 / 테스트 전담
-- **GitHub**: https://github.com/silicao3o/lite-k8s
+- **GitHub**: https://github.com/silicao3o/kite
 - **한줄 소개**: Docker 컨테이너를 K8s 없이 K8s처럼 — 실시간 모니터링, 자가치유, AI 사후 분석, 자동 롤링 업데이트를 제공하는 Spring Boot 기반 경량 오케스트레이션 플랫폼
 
 ---
