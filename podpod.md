@@ -9,7 +9,6 @@
 
   - **기간**: 2024.12 ~ 2025.07
   - **역할**: Backend Developer
-  - **GitHub**: https://github.com/SparklePenguin/podpod_backend
 
   ## 기술 스택
 
