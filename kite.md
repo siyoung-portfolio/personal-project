@@ -10,7 +10,7 @@
 
   - **기간**: 2026.03 ~ 현재
   - **역할**: 기획 / Backend Developer (1인 개발)
-  - **GitHub**: https://github.com/silicao3o/docker-monitor
+  - **GitHub**: https://github.com/silicao3o/kite
 
   ## 기술 스택
 
